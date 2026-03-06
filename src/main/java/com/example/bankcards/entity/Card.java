@@ -16,7 +16,7 @@ public class Card {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private AppUser user;
 
     private String card_number;
     private String status;

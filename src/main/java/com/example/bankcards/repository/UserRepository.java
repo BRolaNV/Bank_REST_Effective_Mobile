@@ -1,12 +1,12 @@
 package com.example.bankcards.repository;
 
-import com.example.bankcards.entity.User;
+import com.example.bankcards.entity.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long>{
-    public Optional<User> findByUsername(String username);
+public interface UserRepository extends JpaRepository<AppUser, Long>{
+    public Optional<AppUser> findByUsername(String username);
 }
