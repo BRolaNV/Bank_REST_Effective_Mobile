@@ -1,13 +1,20 @@
 package com.example.bankcards.entity;
 
+import com.example.bankcards.util.CardNumberEncryptor;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Data
 @Table(name = "cards")
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Card {
 
     @Id
@@ -18,9 +25,18 @@ public class Card {
     @JoinColumn(name = "user_id")
     private AppUser user;
 
-    private String card_number;
-    private String status;
+    @Column(name = "card_number")
+    @Convert(converter = CardNumberEncryptor.class)
+    private String cardNumber;
+
+    @Enumerated(EnumType.STRING)
+    private CardStatus status;
+
     private BigDecimal balance;
-    private String expire_date;
-    private String owner_name;
+
+    @Column(name = "expire_date")
+    private String expireDate;
+
+    @Column(name = "owner_name")
+    private String ownerName;
 }

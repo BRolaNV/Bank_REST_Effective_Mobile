@@ -1,9 +1,16 @@
 databaseChangeLog:
+
   - include:
       file: db/migration/001-create-users.yaml
       relativeToChangelogFile: false
       classpath: true
+
   - include:
       file: db/migration/002-create-cards.yaml
+      relativeToChangelogFile: false
+      classpath: true
+
+  - include:
+      file: db/migration/003-insert-admin.yaml
       relativeToChangelogFile: false
       classpath: true

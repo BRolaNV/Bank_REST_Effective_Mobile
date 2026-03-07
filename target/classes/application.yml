@@ -24,3 +24,6 @@ spring:
 jwt:
   secret: dGhpcyBpcyBhIHZlcnkgbG9uZyBzZWNyZXQga2V5IGZvciBqd3Q=
   expiration: 86400000
+
+encryption:
+  secret: MySuperSecretKey

@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3
+      author: Rolan
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: username
+                  value: admin
+              - column:
+                  name: password
+                  value: $2a$10$Pf6SOAX7qeZ9FLCURRTvc.ICszBNYcOH8fOr3bCOmHQG.GFj2Ytu2
+              - column:
+                  name: role
+                  value: ADMIN
