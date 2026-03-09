@@ -3,6 +3,7 @@ package com.example.bankcards.controller;
 
 import com.example.bankcards.dto.TransferRequest;
 import com.example.bankcards.service.TransferService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +20,7 @@ public class TransferController {
     }
 
     @PostMapping("")
-    public void transfer(@RequestBody TransferRequest request) {
+    public void transfer(@Valid @RequestBody TransferRequest request) {
         transferService.transfer(request);
     }
 }

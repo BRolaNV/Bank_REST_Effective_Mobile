@@ -2,6 +2,7 @@ package com.example.bankcards.exception;
 
 import com.example.bankcards.dto.MyErrorResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -51,6 +52,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<MyErrorResponse> handlerInvalidCredentialsException(InvalidCredentialsException e) {
 
         return ResponseEntity.status(400).body(builder(400, e.getMessage()));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<MyErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+
+        return ResponseEntity.status(400).body(builder(400, e.getBindingResult().getFieldErrors().get(0).getDefaultMessage()));
     }
 
     @ExceptionHandler(Exception.class)

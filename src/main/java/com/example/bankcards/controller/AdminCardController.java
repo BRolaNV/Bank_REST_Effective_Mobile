@@ -4,6 +4,7 @@ import com.example.bankcards.dto.CardRequest;
 import com.example.bankcards.dto.CardResponse;
 import com.example.bankcards.entity.CardStatus;
 import com.example.bankcards.service.CardService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class AdminCardController {
     }
 
     @PostMapping("")
-    public CardResponse createCard(@RequestBody CardRequest request) {
+    public CardResponse createCard(@Valid @RequestBody CardRequest request) {
         CardResponse card = cardService.createCard(request);
         return card;
     }
