@@ -5,6 +5,8 @@ import com.example.bankcards.dto.CardResponse;
 import com.example.bankcards.entity.AppUser;
 import com.example.bankcards.entity.Card;
 import com.example.bankcards.entity.CardStatus;
+import com.example.bankcards.exception.CardNotFoundException;
+import com.example.bankcards.exception.UserNotFoundException;
 import com.example.bankcards.repository.CardRepository;
 import com.example.bankcards.repository.UserRepository;
 import com.example.bankcards.util.CardMaskUtil;
@@ -39,7 +41,7 @@ public class CardService {
                         .balance(BigDecimal.valueOf(0))
                         .expireDate(cardRequest.getExpireDate())
                         .user(userRepository.findById(cardRequest.getUserId()).orElseThrow(()
-                                -> new RuntimeException("User not found")))
+                                -> new UserNotFoundException("User not found")))
                 .build());
 
         return toResponse(saved);
@@ -48,7 +50,7 @@ public class CardService {
     public void deleteCard(Long cardId) {
 
         Card card = cardRepository.findById(cardId).orElseThrow(()
-                -> new RuntimeException("Card not found"));
+                -> new CardNotFoundException("Card not found"));
 
         cardRepository.deleteById(cardId);
 
@@ -57,7 +59,7 @@ public class CardService {
     public CardResponse updateCard(Long cardId, CardStatus status) {
 
         Card card = cardRepository.findById(cardId).orElseThrow(()
-                -> new RuntimeException("Card not found"));
+                -> new CardNotFoundException("Card not found"));
 
         card.setStatus(status);
         Card saved = cardRepository.save(card);
@@ -73,7 +75,7 @@ public class CardService {
 
         AppUser appUser = userRepository.findByUsername(
                 SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(()
-                -> new RuntimeException("User not found"));
+                -> new UserNotFoundException("User not found"));
 
         Long userId = appUser.getId();
 
@@ -94,14 +96,14 @@ public class CardService {
 
         AppUser appUser = userRepository.findByUsername(
                 SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(()
-                -> new RuntimeException("User not found"));
+                -> new UserNotFoundException("User not found"));
 
         Long userId = appUser.getId();
 
         Optional<Card> card = cardRepository.findByIdAndUserId(cardId, userId);
 
 
-        return card.orElseThrow(() -> new RuntimeException("Card not found")).getBalance();
+        return card.orElseThrow(() -> new CardNotFoundException("Card not found")).getBalance();
 
     }
 
@@ -109,12 +111,12 @@ public class CardService {
 
         AppUser appUser = userRepository.findByUsername(
                 SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(()
-                -> new RuntimeException("User not found"));
+                -> new UserNotFoundException("User not found"));
 
         Long userId = appUser.getId();
 
         Card card = cardRepository.findByIdAndUserId(cardId, userId)
-                .orElseThrow(() -> new RuntimeException("Card not found"));
+                .orElseThrow(() -> new CardNotFoundException("Card not found"));
         card.setStatus(CardStatus.BLOCKED);
         Card saved = cardRepository.save(card);
 

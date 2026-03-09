@@ -2,6 +2,7 @@ package com.example.bankcards.service;
 
 import com.example.bankcards.entity.AppUser;
 import com.example.bankcards.entity.Role;
+import com.example.bankcards.exception.InvalidCredentialsException;
 import com.example.bankcards.repository.UserRepository;
 import com.example.bankcards.security.JWTTokenProvider;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,10 +24,10 @@ public class AuthService {
     public void register(String username, String password) {
 
         if (username == null || username.isEmpty()) {
-            throw new IllegalArgumentException("Username cannot be null or empty");
+            throw new InvalidCredentialsException("Username cannot be null or empty");
         }
         if (password == null || password.isEmpty()) {
-            throw new IllegalArgumentException("Password cannot be null or empty");
+            throw new InvalidCredentialsException("Password cannot be null or empty");
         }
 
         userRepository.save(AppUser.builder()
@@ -38,9 +39,9 @@ public class AuthService {
 
     public String login(String username, String password) {
         AppUser user = userRepository.findByUsername(username).orElseThrow(() ->
-                new IllegalArgumentException("Invalid username or password"));
+                new InvalidCredentialsException("Invalid username or password"));
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new IllegalArgumentException("Invalid username or password");
+            throw new InvalidCredentialsException("Invalid username or password");
         }
         return jwtTokenProvider.generateToken(username, user.getRole().name());
     }
