@@ -10,6 +10,7 @@ import com.example.bankcards.exception.InsufficientFundsException;
 import com.example.bankcards.exception.UserNotFoundException;
 import com.example.bankcards.repository.CardRepository;
 import com.example.bankcards.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,7 @@ public class TransferService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public void transfer(TransferRequest request) {
 
         AppUser appUser = userRepository.findByUsername(

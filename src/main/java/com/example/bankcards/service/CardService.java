@@ -5,11 +5,16 @@ import com.example.bankcards.dto.CardResponse;
 import com.example.bankcards.entity.AppUser;
 import com.example.bankcards.entity.Card;
 import com.example.bankcards.entity.CardStatus;
+import com.example.bankcards.exception.CardNotActiveException;
 import com.example.bankcards.exception.CardNotFoundException;
 import com.example.bankcards.exception.UserNotFoundException;
 import com.example.bankcards.repository.CardRepository;
 import com.example.bankcards.repository.UserRepository;
 import com.example.bankcards.util.CardMaskUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +40,7 @@ public class CardService {
     public CardResponse createCard(CardRequest cardRequest) {
 
         Card saved = cardRepository.save(Card.builder()
-                        .cardNumber(cardRequest.getCardNumber())
+                        .cardNumber(cardRequest.getCardNumber().replaceAll("[\\s-]+", ""))
                         .status(CardStatus.ACTIVE)
                         .ownerName(cardRequest.getOwnerName())
                         .balance(BigDecimal.valueOf(0))
@@ -117,10 +122,16 @@ public class CardService {
 
         Card card = cardRepository.findByIdAndUserId(cardId, userId)
                 .orElseThrow(() -> new CardNotFoundException("Card not found"));
-        card.setStatus(CardStatus.BLOCKED);
-        Card saved = cardRepository.save(card);
+        if (card.getStatus() == CardStatus.ACTIVE){
 
-        return toResponse(saved);
+            card.setStatus(CardStatus.BLOCKED);
+            Card saved = cardRepository.save(card);
+
+            return toResponse(saved);
+
+        } else {
+            throw new CardNotActiveException("Card is not active");
+        }
     }
 
     private CardResponse toResponse(Card card) {

@@ -3,6 +3,7 @@ package com.example.bankcards.service;
 import com.example.bankcards.entity.AppUser;
 import com.example.bankcards.entity.Role;
 import com.example.bankcards.exception.InvalidCredentialsException;
+import com.example.bankcards.exception.UserAlreadyExistException;
 import com.example.bankcards.repository.UserRepository;
 import com.example.bankcards.security.JWTTokenProvider;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,18 +24,16 @@ public class AuthService {
 
     public void register(String username, String password) {
 
-        if (username == null || username.isEmpty()) {
-            throw new InvalidCredentialsException("Username cannot be null or empty");
-        }
-        if (password == null || password.isEmpty()) {
-            throw new InvalidCredentialsException("Password cannot be null or empty");
-        }
+        if (userRepository.findByUsername(username).isEmpty()){
 
-        userRepository.save(AppUser.builder()
-                .username(username)
-                .password(passwordEncoder.encode(password))
-                .role(Role.USER)
-                .build());
+            userRepository.save(AppUser.builder()
+                    .username(username)
+                    .password(passwordEncoder.encode(password))
+                    .role(Role.USER)
+                    .build());
+        } else {
+            throw new UserAlreadyExistException("User already exists");
+        }
     }
 
     public String login(String username, String password) {
