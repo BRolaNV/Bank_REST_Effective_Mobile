@@ -11,10 +11,6 @@ import com.example.bankcards.exception.UserNotFoundException;
 import com.example.bankcards.repository.CardRepository;
 import com.example.bankcards.repository.UserRepository;
 import com.example.bankcards.util.CardMaskUtil;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +33,7 @@ public class CardService {
 
     }
 
+
     public CardResponse createCard(CardRequest cardRequest) {
 
         Card saved = cardRepository.save(Card.builder()
@@ -52,14 +49,16 @@ public class CardService {
         return toResponse(saved);
     }
 
+
     public void deleteCard(Long cardId) {
 
         Card card = cardRepository.findById(cardId).orElseThrow(()
                 -> new CardNotFoundException("Card not found"));
 
-        cardRepository.deleteById(cardId);
+        cardRepository.delete(card);
 
     }
+
 
     public CardResponse updateCard(Long cardId, CardStatus status) {
 
@@ -72,9 +71,11 @@ public class CardService {
         return toResponse(saved);
     }
 
+
     public List<CardResponse> getAllCards() {
         return cardRepository.findAll().stream().map(this::toResponse).toList();
     }
+
 
     public Page<CardResponse> getUsersCards(CardStatus status, int page, int size) {
 
@@ -87,15 +88,12 @@ public class CardService {
         Pageable pageable = PageRequest.of(page, size);
 
         if (status == null) {
-
             return cardRepository.findByUserId(userId, pageable).map(this::toResponse);
-
         } else {
-
             return cardRepository.findByUserIdAndStatus(userId, status, pageable).map(this::toResponse);
-
         }
     }
+
 
     public BigDecimal getCardBalance(Long cardId) {
 
@@ -107,10 +105,9 @@ public class CardService {
 
         Optional<Card> card = cardRepository.findByIdAndUserId(cardId, userId);
 
-
         return card.orElseThrow(() -> new CardNotFoundException("Card not found")).getBalance();
-
     }
+
 
     public CardResponse requestBlock(Long cardId){
 
@@ -122,19 +119,21 @@ public class CardService {
 
         Card card = cardRepository.findByIdAndUserId(cardId, userId)
                 .orElseThrow(() -> new CardNotFoundException("Card not found"));
+
         if (card.getStatus() == CardStatus.ACTIVE){
 
             card.setStatus(CardStatus.BLOCKED);
             Card saved = cardRepository.save(card);
 
             return toResponse(saved);
-
         } else {
             throw new CardNotActiveException("Card is not active");
         }
     }
 
+
     private CardResponse toResponse(Card card) {
+
         return CardResponse.builder()
                 .id(card.getId())
                 .maskedCardNumber(CardMaskUtil.maskCardNumber(card.getCardNumber()))

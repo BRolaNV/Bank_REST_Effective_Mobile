@@ -25,6 +25,7 @@ public class AdminCardController {
         this.cardService = cardService;
     }
 
+
     @PostMapping("")
     @Operation(summary = "Create a new card", description = "Creates a new card with the provided details")
     @ApiResponses(value = {
@@ -34,9 +35,9 @@ public class AdminCardController {
             @ApiResponse(responseCode = "403", description = "Access denied")
     })
     public CardResponse createCard(@Valid @RequestBody CardRequest request) {
-        CardResponse card = cardService.createCard(request);
-        return card;
+        return cardService.createCard(request);
     }
+
 
     @PutMapping("/{id}/activate")
     @Operation(summary = "Activate a card", description = "Activates a card by ID")
@@ -46,9 +47,9 @@ public class AdminCardController {
             @ApiResponse(responseCode = "403", description = "Access denied")
     })
     public CardResponse activateCard(@PathVariable Long id) {
-        CardResponse card = cardService.updateCard(id, CardStatus.ACTIVE);
-        return card;
+        return cardService.updateCard(id, CardStatus.ACTIVE);
     }
+
 
     @PutMapping("/{id}/block")
     @Operation(summary = "Block a card", description = "Blocks a card by ID")
@@ -58,9 +59,9 @@ public class AdminCardController {
             @ApiResponse(responseCode = "403", description = "Access denied")
     })
     public CardResponse blockCard(@PathVariable Long id) {
-        CardResponse card = cardService.updateCard(id, CardStatus.BLOCKED);
-        return card;
+        return cardService.updateCard(id, CardStatus.BLOCKED);
     }
+
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a card", description = "Deletes a card by ID")
@@ -73,6 +74,7 @@ public class AdminCardController {
         cardService.deleteCard(id);
         return ResponseEntity.noContent().build();
     }
+
 
     @GetMapping("")
     @Operation(summary = "Get all cards", description = "Returns a list of all cards")

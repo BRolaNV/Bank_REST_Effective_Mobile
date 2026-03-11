@@ -1,7 +1,6 @@
 package com.example.bankcards.controller;
 
 
-import com.example.bankcards.dto.CardRequest;
 import com.example.bankcards.dto.CardResponse;
 import com.example.bankcards.entity.CardStatus;
 import com.example.bankcards.service.CardService;
@@ -13,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/user/cards")
@@ -26,6 +24,7 @@ public class UserCardController {
         this.cardService = cardService;
     }
 
+
     @PutMapping("/{id}/request-block")
     @Operation(summary = "Block a card by ID", description = "Request to block a card by ID")
     @ApiResponses(value = {
@@ -33,9 +32,9 @@ public class UserCardController {
             @ApiResponse(responseCode = "404", description = "Card not found")
     })
     public CardResponse blockCard(@PathVariable Long id) {
-        CardResponse card = cardService.requestBlock(id);
-        return card;
+        return cardService.requestBlock(id);
     }
+
 
     @GetMapping("")
     @Operation(summary = "Get user cards", description = "Returns a list of user cards")
@@ -48,6 +47,7 @@ public class UserCardController {
                                            @RequestParam(defaultValue = "10") int size) {
         return cardService.getUsersCards(status, page, size);
     }
+
 
     @GetMapping("/{id}/balance")
     @Operation(summary = "Get card balance", description = "Returns the balance of a card by ID")

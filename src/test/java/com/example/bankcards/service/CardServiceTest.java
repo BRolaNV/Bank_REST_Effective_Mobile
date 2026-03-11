@@ -32,8 +32,9 @@ public class CardServiceTest {
     @InjectMocks
     private CardService cardService;
 
-    Card card;
-    AppUser appUser;
+    private Card card;
+    private AppUser appUser;
+
 
     @BeforeEach
     public void setUp() {
@@ -55,6 +56,7 @@ public class CardServiceTest {
                 .build();
     }
 
+
     @Test
     public void blockCard_success() {
 
@@ -65,6 +67,7 @@ public class CardServiceTest {
 
         assertEquals(CardStatus.BLOCKED, card.getStatus());
     }
+
 
     @Test
     public void activateCard_success() {
@@ -78,6 +81,5 @@ public class CardServiceTest {
 
         assertEquals(CardStatus.ACTIVE, card.getStatus());
     }
-
 }
 

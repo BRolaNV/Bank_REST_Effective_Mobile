@@ -1,6 +1,5 @@
 package com.example.bankcards.security;
 
-import com.example.bankcards.entity.AppUser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -18,6 +17,7 @@ public class JWTTokenProvider {
     @Value("${jwt.secret}")
     private String secret;
 
+
     public String generateToken(String username, String role) {
 
         String token = Jwts.builder()
@@ -27,22 +27,30 @@ public class JWTTokenProvider {
                 .claim("role", role)
                 .signWith(Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret)))
                 .compact();
+
         return token;
     }
 
+
     public boolean validateToken(String token) {
+
         try {
+
             Jwts.parserBuilder()
                     .setSigningKey(Decoders.BASE64.decode(secret))
                     .build()
                     .parseClaimsJws(token);
+
             return true;
         } catch (Exception e) {
             return false;
         }
+
     }
 
+
     public String getUsername(String token) {
+
         return Jwts.parserBuilder()
                 .setSigningKey(Decoders.BASE64.decode(secret))
                 .build()

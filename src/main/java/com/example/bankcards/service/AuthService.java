@@ -22,6 +22,7 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
+
     public void register(String username, String password) {
 
         if (userRepository.findByUsername(username).isEmpty()){
@@ -36,12 +37,16 @@ public class AuthService {
         }
     }
 
+
     public String login(String username, String password) {
+
         AppUser user = userRepository.findByUsername(username).orElseThrow(() ->
                 new InvalidCredentialsException("Invalid username or password"));
+
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new InvalidCredentialsException("Invalid username or password");
         }
+
         return jwtTokenProvider.generateToken(username, user.getRole().name());
     }
 

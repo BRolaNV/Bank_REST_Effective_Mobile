@@ -39,9 +39,10 @@ public class TransferServiceTest {
     @InjectMocks
     private TransferService transferService;
 
-    AppUser appUser;
-    Card fromCard;
-    Card toCard;
+    private AppUser appUser;
+    private Card fromCard;
+    private Card toCard;
+
 
     @BeforeEach
     public void setUp() {
@@ -79,6 +80,7 @@ public class TransferServiceTest {
         SecurityContextHolder.setContext(securityContext);
     }
 
+
     @Test
     public void transfer_success() {
 
@@ -98,6 +100,7 @@ public class TransferServiceTest {
         assertEquals(BigDecimal.valueOf(50), toCard.getBalance());
     }
 
+
     @Test
     public void transfer_insufficientFunds() {
 
@@ -114,6 +117,7 @@ public class TransferServiceTest {
         assertThrows(InsufficientFundsException.class, () -> transferService.transfer(request));
     }
 
+
     @Test
     public void transfer_cardNotFound() {
 
@@ -128,6 +132,7 @@ public class TransferServiceTest {
 
         assertThrows(CardNotFoundException.class, () -> transferService.transfer(request));
     }
+
 
     @Test
     public void transfer_cardNotActive() {

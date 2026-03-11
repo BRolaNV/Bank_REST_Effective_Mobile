@@ -20,6 +20,7 @@ public class SecurityConfig {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
+
     @Bean
     public SecurityFilterChain  securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -33,6 +34,7 @@ public class SecurityConfig {
                         .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
